@@ -104,7 +104,7 @@ class Client(API):
                      total: Decimal = None, percent_balance: int = None,
                      execution_type: str = API.ORDER_LIMIT) -> dict:
         """
-        >> You can enter Quantity or Total.
+        You can enter Quantity or Total.
 
         :param order_type: BUY or SELL
         :param currency_price: Currency of Unit Price
