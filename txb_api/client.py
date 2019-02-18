@@ -103,6 +103,18 @@ class Client(API):
                      currency_price: str, unit_price: Decimal, currency_quantity: str, quantity: Decimal = None,
                      total: Decimal = None, percent_balance: int = None,
                      execution_type: str = API.ORDER_LIMIT) -> dict:
+        """
+        >> You can enter Quantity or Total.
+
+        :param order_type: BUY or SELL
+        :param currency_price: Currency of Unit Price
+        :param unit_price: Unit Price
+        :param currency_quantity: Currency of Quantity
+        :param quantity: (optional) Quantity
+        :param total: (optional) Total
+        :param percent_balance: (optional) Percentage of Currency Balance of Unit Price
+        :param execution_type: LIMIT or MARKET
+        """
 
         url = '{api_url}/{api_version}/order/{currency_price}/{currency_quantity}/{order_type}/'.format(
             api_url=self.API_URL,
@@ -133,7 +145,7 @@ class Client(API):
             api_version=self.CLIENT_API_VERSION,
             currency_price=currency_price,
             currency_quantity=currency_quantity,
-            order_type=order_type,
+            order_type=order_type.lower(),
         )
         params = {'filter': filter_by} if filter_by else {}
         orders = self._request('GET', url, params=params)
