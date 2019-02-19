@@ -1,2 +1,2 @@
 # python-txb-api
-Python wrapper for 3xbit API
+Python wrapper based on our [Rest API Documentations](https://github.com/3xbit/docs)
