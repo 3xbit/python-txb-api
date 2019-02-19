@@ -6,11 +6,11 @@ setup(
     name='txb-api',
     version='1.0.0',
     packages=find_packages(),
-    url='https://app.3xbit.com.br',
+    url='https://github.com/3xbit/python-txb-api',
     license='',
     author='3xBit',
     author_email='drodrigues@3xbit.com.br',
-    description='Software Development Kit',
+    description='Python wrapper for 3xBit API',
     install_requires=[
         'requests'
     ],
