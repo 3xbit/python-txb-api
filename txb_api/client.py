@@ -54,9 +54,9 @@ class Client(API):
 
     def balance(self, currency: str = None) -> any:
         url = '{api_url}/{api_version}/balance/'.format(api_url=self.API_URL, api_version=self.CLIENT_API_VERSION)
-        if currency:
-            url += currency
         balance = self._request('GET', url)
+        if currency:
+            balance = next(b for b in balance if b.get('currency', {}).get('code') == currency)
         return balance
 
     def list_deposits(self, currency: str, status: str = None) -> list:
@@ -99,8 +99,8 @@ class Client(API):
         withdraw = self._request('GET', url)
         return withdraw
 
-    def create_order(self, order_type: str,
-                     currency_price: str, unit_price: Decimal, currency_quantity: str, quantity: Decimal = None,
+    def create_order(self, order_type: str, currency_price: str, currency_quantity: str,
+                     unit_price: Decimal = None, quantity: Decimal = None,
                      total: Decimal = None, percent_balance: int = None,
                      execution_type: str = API.ORDER_LIMIT) -> dict:
         """
@@ -124,12 +124,16 @@ class Client(API):
             order_type=order_type.lower(),
         )
 
-        if percent_balance:
-            available_balance = self.balance(currency_price).get('available_balance')
-            total = Decimal(str(available_balance)) * percent_balance / 100
-
-        market = currency_price + currency_quantity
-        unit_price, quantity, total = calc_order(market, unit_price, quantity, total)
+        if execution_type == self.ORDER_LIMIT:
+            if percent_balance:
+                if order_type == self.ORDER_BUY:
+                    available_balance = self.balance(currency_price).get('available_balance')
+                    total = Decimal(str(available_balance)) * percent_balance / 100
+                if order_type == self.ORDER_SELL:
+                    available_balance = self.balance(currency_quantity).get('available_balance')
+                    quantity = Decimal(str(available_balance)) * percent_balance / 100
+            market = currency_price + currency_quantity
+            unit_price, quantity, total = calc_order(market, unit_price, quantity, total)
 
         data = {
             'execution_type': execution_type,

@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='txb-api',
-    version='1.0.0',
+    version='1.0.1',
     packages=find_packages(),
     url='https://github.com/3xbit/python-txb-api',
     license='MIT License',
