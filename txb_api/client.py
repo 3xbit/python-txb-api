@@ -59,6 +59,15 @@ class Client(API):
             balance = next(b for b in balance if b.get('currency', {}).get('code') == currency)
         return balance
 
+    def recalculate_balance(self, currency: str = None) -> any:
+        url = '{api_url}/{api_version}/balance/{currency}/recalculate/'.format(
+            api_url=self.API_URL,
+            api_version=self.CLIENT_API_VERSION,
+            currency=currency,
+        )
+        balance = self._request('GET', url)
+        return balance
+
     def list_deposits(self, currency: str, status: str = None) -> list:
         url = '{api_url}/{api_version}/deposit/{currency}/'.format(
             api_url=self.API_URL,
